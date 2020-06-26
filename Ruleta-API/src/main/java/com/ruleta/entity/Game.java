@@ -1,6 +1,7 @@
 package com.ruleta.entity;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,9 +28,11 @@ public class Game {
 	private String color;
 	@Column(name = "number", length = 2, updatable = false)
 	private String number;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roulette_id", referencedColumnName = "id", updatable = false)
 	private Roulette roulette;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false)
 	private User user;

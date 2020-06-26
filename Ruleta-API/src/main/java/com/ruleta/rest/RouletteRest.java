@@ -1,14 +1,13 @@
 package com.ruleta.rest;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,32 +27,31 @@ public class RouletteRest {
 		return ResponseEntity.ok(newRoulette);
 	}
 
-	@PutMapping(value = "open/{rouletteId}")
-	public ResponseEntity<Roulette> OpenRouletteById(@PathVariable("rouletteId") int rouletteId) {
-		Optional<Roulette> optionalRoulette = rouletteDao.findById(rouletteId);
-		if (optionalRoulette.isPresent()) {
-			Roulette updateRoulette = optionalRoulette.get();
-			updateRoulette.setOpen(true);
-			updateRoulette.setEndTime(null);
-			updateRoulette.setStarTime(new Date());
+	@GetMapping(value = "open/{rouletteId}")
+	public ResponseEntity openRouletteById(@PathVariable("rouletteId") int rouletteId) {
+		ResponseEntity<Roulette> response = getRouletteById(rouletteId);
+		if (response.getStatusCodeValue() == 200) {
+			Roulette updateRoulette = response.getBody();
+			updateRoulette.openRoulette();
 			rouletteDao.save(updateRoulette);
-			return ResponseEntity.ok(updateRoulette);
+			return new ResponseEntity(HttpStatus.OK);
 		} else {
-			return ResponseEntity.noContent().build();
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@PutMapping(value = "close/{rouletteId}")
-	public String closeRouletteById(@PathVariable("rouletteId") int rouletteId) {
-		Optional<Roulette> optionalRoulette = rouletteDao.findById(rouletteId);
-		if (optionalRoulette.isPresent()) {
-			Roulette updateRoulette = optionalRoulette.get();
-			updateRoulette.setOpen(false);
-			updateRoulette.setEndTime(new Date());
+	@GetMapping(value = "close/{rouletteId}")
+	public ResponseEntity<Integer> closeRouletteById(@PathVariable("rouletteId") int rouletteId) {
+		ResponseEntity<Roulette> response = getRouletteById(rouletteId);
+		if (response.getStatusCodeValue() == 200) {
+			Roulette updateRoulette = response.getBody();
+			updateRoulette.closeRoulette();
 			rouletteDao.save(updateRoulette);
-			return "Recaudo total: " + updateRoulette.getValueByDate();
+			int value=rouletteDao.getValueByDateQuery(updateRoulette.getId(), updateRoulette.getStarTime(),
+					updateRoulette.getEndTime());
+			return ResponseEntity.ok(value);
 		} else {
-			return "";
+			return ResponseEntity.notFound().build();
 		}
 	}
 
@@ -63,9 +61,10 @@ public class RouletteRest {
 		return ResponseEntity.ok(roulettes);
 	}
 
-	@RequestMapping(value = "{rouletteId}")
+	@RequestMapping(value = "/{rouletteId}")
 	public ResponseEntity<Roulette> getRouletteById(@PathVariable("rouletteId") int rouletteId) {
 		Optional<Roulette> optionalRoulette = rouletteDao.findById(rouletteId);
+
 		if (optionalRoulette.isPresent())
 			return ResponseEntity.ok(optionalRoulette.get());
 		else

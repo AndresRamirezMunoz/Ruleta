@@ -19,10 +19,10 @@ public class GameRest {
 	private GameDao gameDao;
 
 	@PostMapping
-	public ResponseEntity<Game> createGame(@RequestBody Game game) {
+	public int createGame(@RequestBody Game game) {
 		game.setStarTime(new Date());
-		Game newGame = gameDao.save(game);
-		return ResponseEntity.ok(newGame);
+		gameDao.save(game);
+		return game.getId();
 	}
 
 	@GetMapping
@@ -30,7 +30,5 @@ public class GameRest {
 		List<Game> games = gameDao.findAll();
 		return ResponseEntity.ok(games);
 	}
-	
-	
 
 }

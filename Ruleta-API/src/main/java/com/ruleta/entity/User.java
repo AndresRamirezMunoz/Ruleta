@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Users")
 public class User {
@@ -27,6 +29,7 @@ public class User {
 	private String email;
 	@Column(name = "coins")
 	private int coins;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Game> games = new ArrayList<>();
 
