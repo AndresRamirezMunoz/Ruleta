@@ -1,13 +1,42 @@
 package com.ruleta.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Users")
 public class User {
 
+	@Id
+	@Column(name = "id")
 	private String id;
+	@Column(name = "name", nullable = false, length = 30)
 	private String name;
+	@Column(name = "lastname", nullable = false, length = 30)
 	private String lastName;
+	@Column(name = "password", nullable = false, length = 30)
 	private String password;
+	@Column(name = "email", nullable = false, length = 30)
 	private String email;
+	@Column(name = "coins")
 	private int coins;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Game> games = new ArrayList<>();
+
+	public List<Game> getGames() {
+		return games;
+	}
+
+	public void setGames(List<Game> games) {
+		this.games = games;
+	}
 
 	public String getId() {
 		return id;
