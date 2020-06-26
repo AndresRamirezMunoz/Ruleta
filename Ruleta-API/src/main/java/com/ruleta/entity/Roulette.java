@@ -80,4 +80,15 @@ public class Roulette {
 		this.endTime = endTime;
 	}
 
+	public int getValueByDate() {
+		int sum = 0;
+		for (int i = 0; i < games.size(); i++) {
+			Game game = games.get(i);
+			if (game.getStarTime().after(starTime) && game.getStarTime().before(endTime))
+				sum += game.getValue();
+		}
+		return sum;
+	}
+	
+	
 }
