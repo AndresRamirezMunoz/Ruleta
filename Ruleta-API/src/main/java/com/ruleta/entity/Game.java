@@ -10,10 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "game")
@@ -27,17 +23,15 @@ public class Game {
 	private int value;
 	@Column(name = "startime", updatable = false)
 	private Date starTime;
-	@Column(name = "color", nullable = false, length = 15, updatable = false)
+	@Column(name = "color", length = 15, updatable = false)
 	private String color;
-	@Column(name = "number", nullable = false, length = 2, updatable = false)
+	@Column(name = "number", length = 2, updatable = false)
 	private String number;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "roulette_id", updatable = false)
-	@JsonIgnore
+	@JoinColumn(name = "roulette_id", referencedColumnName = "id", updatable = false)
 	private Roulette roulette;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", updatable = false)
-	@JsonIgnore
+	@JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false)
 	private User user;
 
 	public int getId() {
