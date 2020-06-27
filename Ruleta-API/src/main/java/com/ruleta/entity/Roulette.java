@@ -25,10 +25,10 @@ public class Roulette {
 	private int id;
 	@Column(name = "name", nullable = false, length = 30)
 	private String name;
-	@Column(name = "state", nullable = false)
-	private boolean state;
+	@Column(name = "state", nullable = false, length = 30)
+	private String state;
 	@Column(name = "startime")
-	private Date starTime;
+	private Date startTime;
 	@Column(name = "endtime")
 	private Date endTime;
 	@JsonIgnore
@@ -59,23 +59,31 @@ public class Roulette {
 		this.name = name;
 	}
 
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	public void openRoulette() {
-		state = true;
+		state = "abierta";
 		endTime = null;
-		starTime = new Date();
+		startTime = new Date();
 	}
 
 	public void closeRoulette() {
-		state = false;
+		state = "cerrada";
 		endTime = new Date();
 	}
 
-	public Date getStarTime() {
-		return starTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setStarTime(Date starTime) {
-		this.starTime = starTime;
+	public void setStartTime(Date starTime) {
+		this.startTime = starTime;
 	}
 
 	public Date getEndTime() {

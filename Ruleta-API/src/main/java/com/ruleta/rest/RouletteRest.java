@@ -47,7 +47,7 @@ public class RouletteRest {
 			Roulette updateRoulette = response.getBody();
 			updateRoulette.closeRoulette();
 			rouletteDao.save(updateRoulette);
-			int value=rouletteDao.getValueByDateQuery(updateRoulette.getId(), updateRoulette.getStarTime(),
+			int value=rouletteDao.getValueByDateQuery(updateRoulette.getId(), updateRoulette.getStartTime(),
 					updateRoulette.getEndTime());
 			return ResponseEntity.ok(value);
 		} else {
